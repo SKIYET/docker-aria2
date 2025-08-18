@@ -2,14 +2,14 @@
 
 # Check CPU architecture
 ARCH=$(uname -m)
-ARIAC=1.36.0
+ARIAC=1.37.0
 echo -e "${INFO} Check CPU architecture ..."
 if [[ ${ARCH} == "x86_64" ]]; then
-    ARCH="aria2-${ARIAC}-static-linux-amd64.tar.gz"
+    ARCH="aria2-x86_64-linux-musl_static.zip"
 elif [[ ${ARCH} == "aarch64" ]]; then
-    ARCH="aria2-${ARIAC}-static-linux-arm64.tar.gz"
+    ARCH="aria2-aarch64-linux-musl_static.zip"
 elif [[ ${ARCH} == "armv7l" ]]; then
-    ARCH="aria2-${ARIAC}-static-linux-armhf.tar.gz"
+    ARCH="aria2-arm-linux-musleabi_static.zip"
 else
     echo -e "${ERROR} This architecture is not supported."
     exit 1
@@ -17,6 +17,8 @@ fi
 
 # Download files
 echo "Downloading binary file: ${ARCH}"
-curl -L "https://github.com/SuperNG6/docker-aria2/releases/download/2021.08.24/${ARCH}" | tar -xz
+#curl -L "https://github.com/SKIYET/aria2-static-build/releases/download/continuous/${ARCH}"
+wget https://github.com/SKIYET/aria2-static-build/releases/download/continuous/${ARCH}
+unzip ${ARCH}
 mv aria2c /usr/local/bin
 echo "Download binary file: ${ARCH} completed"
