@@ -7,7 +7,7 @@ RUN apk add --no-cache curl wget unzip \
     && unzip /tmp/AriaNg-${ARIANG_VER}-AllInOne.zip -d /tmp \
     && A2B_VER=$(wget -qO- https://api.github.com/repos/makeding/aria2b/tags | grep 'name' | cut -d\" -f4 | head -1 ) \
     && wget -P /tmp https://github.com/makeding/aria2b/releases/download/${A2B_VER}/aria2b \
-    && curl -fsSL https://git.io/docker-aria2c.sh | bash
+    && curl -fsSL https://raw.githubusercontent.com/SKIYET/docker-aria2/refs/heads/master/install.sh | bash
 
 # install static aria2c
 FROM superng6/alpine:3.22
