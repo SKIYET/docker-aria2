@@ -1,4 +1,4 @@
-FROM superng6/alpine:3.22 AS builder
+FROM superng6/alpine:3.21 AS builder
 
 # download static aria2c && AriaNg AllInOne
 RUN apk add --no-cache curl wget unzip \
