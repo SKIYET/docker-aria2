@@ -13,7 +13,8 @@ if [ "${A2B}" == "true" ]; then
     exec aria2b \
       -c "/config/aria2.conf" \
       -u "http://127.0.0.1:${PORT}/jsonrpc" \
-      -s "${SECRET}" > /dev/null 2>&1
+      -s "${SECRET}" \
+      --noprogress-keywords XL,SD,XF,QN,BD,Unknown > /dev/null 2>&1
   else
     # 分支二：启用 Aria2B，并显示日志（默认行为）
     echo "信息：将启动 Aria2B 并显示其运行日志。"
@@ -21,7 +22,8 @@ if [ "${A2B}" == "true" ]; then
     exec aria2b \
       -c "/config/aria2.conf" \
       -u "http://127.0.0.1:${PORT}/jsonrpc" \
-      -s "${SECRET}"
+      -s "${SECRET}"\
+      --noprogress-keywords XL,SD,XF,QN,BD,Unknown
   fi
 
 else
