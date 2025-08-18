@@ -22,7 +22,7 @@ if [ "${A2B}" == "true" ]; then
     exec aria2b \
       -c "/config/aria2.conf" \
       -u "http://127.0.0.1:${PORT}/jsonrpc" \
-      -s "${SECRET}"\
+      -s "${SECRET}" \
       --noprogress-keywords XL,SD,XF,QN,BD,Unknown
   fi
 
