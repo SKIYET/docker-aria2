@@ -5,9 +5,9 @@ on:
 
 env:
   # Docker Hub 镜像名称
-  DOCKER_IMAGE: superng6/aria2
+  DOCKER_IMAGE: skiyet/aria2
   # GitHub Container Registry (ghcr.io) 镜像名称
-  GHCR_IMAGE: ghcr.io/superng6/aria2
+  GHCR_IMAGE: ghcr.io/skiyet/aria2
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GIT_TOKEN }}
 
       # 构建并推送单架构镜像（by digest），同时推送到 Docker Hub 和 GHCR
       - name: 构建并推送单架构镜像（by digest）
