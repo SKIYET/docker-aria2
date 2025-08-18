@@ -5,7 +5,7 @@ RUN apk add --no-cache curl wget unzip \
     && ARIANG_VER=$(wget -qO- https://api.github.com/repos/mayswind/AriaNg/tags | grep 'name' | cut -d\" -f4 | head -1 ) \
     && wget -P /tmp https://github.com/mayswind/AriaNg/releases/download/${ARIANG_VER}/AriaNg-${ARIANG_VER}-AllInOne.zip \
     && unzip /tmp/AriaNg-${ARIANG_VER}-AllInOne.zip -d /tmp \
-    && curl -fsSL https://git.io/docker-aria2c.sh | bash
+    && curl -fsSL https://raw.githubusercontent.com/SKIYET/docker-aria2/refs/heads/master/install.sh | bash
 
 # install static aria2c
 FROM superng6/alpine:3.22
