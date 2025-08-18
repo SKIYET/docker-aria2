@@ -10,7 +10,7 @@ RUN apk add --no-cache curl wget unzip \
     && curl -fsSL https://raw.githubusercontent.com/SKIYET/docker-aria2/refs/heads/master/install.sh | bash
 
 # install static aria2c
-FROM superng6/alpine:3.22
+FROM superng6/alpine:3.21
 
 # set label
 LABEL maintainer="NG6"
