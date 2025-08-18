@@ -72,7 +72,7 @@ max-overall-upload-limit=2M
 # 单个任务上传速度限制, 默认:0
 max-upload-limit=512K
 # 禁用IPv6, 默认:false
-disable-ipv6=true
+disable-ipv6=false
 # 支持GZip，默认:false
 http-accept-gzip=true
 # URI复用，默认: true
@@ -110,9 +110,13 @@ dht-file-path=/config/dht.dat
 # 打开DHT功能, PT需要禁用, 默认:true
 enable-dht=true
 # 打开IPv6 DHT功能, PT需要禁用
-enable-dht6=false
+enable-dht6=true
 # DHT网络监听端口, 默认:6881-6999
 dht-listen-port=6881
+# IPv4 DHT 网络引导节点
+dht-entry-point=dht.transmissionbt.com:6881
+# IPv6 DHT 网络引导节点
+dht-entry-point6=dht.transmissionbt.com:6881
 # 本地节点查找, PT需要禁用, 默认:false
 bt-enable-lpd=true
 # 种子交换, PT需要禁用, 默认:true
