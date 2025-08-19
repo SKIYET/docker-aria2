@@ -121,16 +121,16 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create \
-            -t "${{ env.DOCKER_IMAGE }}:a2b-${{ steps.set-version.outputs.version }}" \
-            -t "${{ env.DOCKER_IMAGE }}:a2b-latest" \
-            -t "${{ env.GHCR_IMAGE }}:a2b-${{ steps.set-version.outputs.version }}" \
-            -t "${{ env.GHCR_IMAGE }}:a2b-latest" \
+            -t "${{ env.DOCKER_IMAGE }}:a2b-rclone-${{ steps.set-version.outputs.version }}" \
+            -t "${{ env.DOCKER_IMAGE }}:a2b-rclone-latest" \
+            -t "${{ env.GHCR_IMAGE }}:a2b-rclone-${{ steps.set-version.outputs.version }}" \
+            -t "${{ env.GHCR_IMAGE }}:a2b-rclone-latest" \
             $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
       # 检查镜像 manifest
       - name: 检查镜像
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE }}:a2b-${{ steps.set-version.outputs.version }}
-          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE }}:a2b-latest
-          docker buildx imagetools inspect ${{ env.GHCR_IMAGE }}:a2b-${{ steps.set-version.outputs.version }}
-          docker buildx imagetools inspect ${{ env.GHCR_IMAGE }}:a2b-latest
+          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE }}:a2b-rclone-${{ steps.set-version.outputs.version }}
+          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE }}:a2b-rclone-latest
+          docker buildx imagetools inspect ${{ env.GHCR_IMAGE }}:a2b-rclone-${{ steps.set-version.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GHCR_IMAGE }}:a2b-rclone-latest
