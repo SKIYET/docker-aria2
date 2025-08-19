@@ -68,7 +68,7 @@ split=16
 # 单个任务下载速度限制, 默认:0
 #max-download-limit=0
 # 整体上传速度限制, 运行时可修改, 默认:0
-max-overall-upload-limit=2M
+max-overall-upload-limit=1M
 # 单个任务上传速度限制, 默认:0
 max-upload-limit=512K
 # 禁用IPv6, 默认:false
@@ -106,7 +106,7 @@ bt-max-peers=100
 # DHT（IPv4）文件
 dht-file-path=/config/dht.dat
 # DHT（IPv6）文件
-# dht-file-path6=/root/.aria2/dht6.dat
+dht-file-path6=/config/dht6.dat
 # 打开DHT功能, PT需要禁用, 默认:true
 enable-dht=true
 # 打开IPv6 DHT功能, PT需要禁用
