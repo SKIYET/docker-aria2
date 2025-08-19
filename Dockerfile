@@ -5,6 +5,7 @@ RUN apk add --no-cache rclone --repository=http://dl-cdn.alpinelinux.org/alpine/
 #rclone挂载时需要fuse
     && apk add fuse3 \
     && /usr/bin/rclone version
+#ENTRYPOINT ["/usr/bin/rclone"]
 
 # download static aria2c && AriaNg AllInOne
 RUN apk add --no-cache curl wget unzip \
