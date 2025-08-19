@@ -10,7 +10,7 @@ sed -i "s@^\(rpc-listen-port=\).*@\1${PORT}@" /config/aria2.conf
 sed -i "s@^\(dht-listen-port=\).*@\1${BTPORT}@" /config/aria2.conf
 sed -i "s@^\(listen-port=\).*@\1${BTPORT}@" /config/aria2.conf
 
-Custom Function
+# Custom Function
 sed -i 's@^\(on-download-stop=\).*@\1/aria2/ScriptCustom1/delete.sh@' /config/aria2.conf
 sed -i 's@^\(on-download-complete=\).*@\1/aria2/ScriptCustom1/upload.sh@' /config/aria2.conf
 sed -i 's@^\(drive-name=\).*@\1gdrive@' /aria2/ScriptCustom1/script.conf
