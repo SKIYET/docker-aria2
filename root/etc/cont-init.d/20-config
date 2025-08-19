@@ -39,6 +39,7 @@ fi
 if [[ ! -e /config/dht.dat ]]
 then
   touch /config/dht.dat
+  touch /config/dht.dat
 fi
 
 # 2021.03.15 变更：日志文件地址变更为`/config/logs`
