@@ -1,5 +1,10 @@
 FROM superng6/alpine:3.21 AS builder
 
+# install rclone
+apk add --no-cache rclone --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/
+#rclone挂载时需要fuse
+apk add fuse3
+
 # download static aria2c && AriaNg AllInOne
 RUN apk add --no-cache curl wget unzip \
     && ARIANG_VER=$(wget -qO- https://api.github.com/repos/mayswind/AriaNg/tags | grep 'name' | cut -d\" -f4 | head -1 ) \
