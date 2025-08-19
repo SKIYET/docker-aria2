@@ -1,12 +1,5 @@
 FROM superng6/alpine:3.21 AS builder
 
-# install rclone
-RUN apk add --no-cache rclone --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
-#rclone挂载时需要fuse
-    && apk add fuse3 \
-    && /usr/bin/rclone version
-#ENTRYPOINT ["/usr/bin/rclone"]
-
 # download static aria2c && AriaNg AllInOne
 RUN apk add --no-cache curl wget unzip \
     && ARIANG_VER=$(wget -qO- https://api.github.com/repos/mayswind/AriaNg/tags | grep 'name' | cut -d\" -f4 | head -1 ) \
@@ -43,6 +36,13 @@ RUN apk add --no-cache darkhttpd curl jq findutils iptables ip6tables ipset node
     && echo "docker-ariang-$ARIANG_VER" >> /aria2/build-date \
     && echo "docker-aria2b-$A2B_VER" >> /aria2/build-date \
     && rm -rf /var/cache/apk/* /tmp/*
+
+# install rclone
+RUN apk add --no-cache rclone --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+#rclone挂载时需要fuse
+    && apk add fuse3 \
+    && /usr/bin/rclone version
+#ENTRYPOINT ["/usr/bin/rclone"]
 
 # volume
 VOLUME /config /downloads /www
