@@ -350,7 +350,7 @@ GET_REMOTE_PATH() {
 
 CHECK_RCLONE() {
     [[ $# -eq 0 ]] && {
-        echo && echo -e "Checking RCLONE connection..." >> "${MOVE_LOG}"
+        echo && echo -e "$(DATE_TIME) ${INFO} Checking RCLONE connection..." >> "${MOVE_LOG}"
         rclone mkdir "${REMOTE_DIR}/TEST"
         if [[ $? -eq 0 ]]; then
             rclone rmdir "${REMOTE_DIR}/TEST"
