@@ -355,10 +355,10 @@ CHECK_RCLONE() {
         if [[ $? -eq 0 ]]; then
             rclone rmdir "${REMOTE_DIR}/TEST"
             echo -e "$(DATE_TIME) ${INFO} RCLONE连接${LIGHT_GREEN_FONT_PREFIX}成功${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
-            exit 0
+            #exit 0 #不然会退出
         else
             echo -e "$(DATE_TIME) ${ERROR} RCLONE连接${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
-            exit 1
+            #exit 1 #不然会退出
         fi
     }
 }
@@ -374,7 +374,7 @@ UPLOAD_FILE() {
     RETRY_NUM=3
     while [ ${RETRY} -le ${RETRY_NUM} ]; do
         [ ${RETRY} != 0 ] && (
-            echo
+            #echo
             echo -e "$(DATE_TIME) ${ERROR} 上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！将重试${RETRY}/${RETRY_NUM} ..." >> "${MOVE_LOG}"
             echo
         )
