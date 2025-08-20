@@ -206,7 +206,7 @@ MOVE_FILE() {
             fi
         fi
     elif [ "${MOVE}" = "upload" ]; then   #使用RCLONE上传到远程目录，如网盘等，新增代码
-        echo -e "$(DATE_TIME) [INFO] 准备上传文件: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+        echo -e "$(DATE_TIME) [INFO] 准备上传任务: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
         UPLOAD_FILE
         CLEAN_UP
     fi
@@ -345,19 +345,19 @@ GET_REMOTE_PATH() {
 		REMOTE_PATH="${REMOTE_FOLDER}/${RELATIVE_PATH}"
         #return
     fi
-    echo -e "$(DATE_TIME) ${INFO} 远程文件(夹)已确认: ${REMOTE_PATH}">> "${MOVE_LOG}"
+    echo -e "$(DATE_TIME) ${INFO} 远程路径已确认: ${REMOTE_PATH}">> "${MOVE_LOG}"
 }
 
 CHECK_RCLONE() {
     [[ $# -eq 0 ]] && {
-        echo && echo -e "$(DATE_TIME) ${INFO} Checking RCLONE connection..." >> "${MOVE_LOG}"
+        echo && echo -e "$(DATE_TIME) ${INFO} 检查 RCLONE 连接..." >> "${MOVE_LOG}"
         rclone mkdir "${REMOTE_DIR}/TEST"
         if [[ $? -eq 0 ]]; then
             rclone rmdir "${REMOTE_DIR}/TEST"
-            echo -e "$(DATE_TIME) ${INFO} RCLONE连接${LIGHT_GREEN_FONT_PREFIX}成功${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
+            echo -e "$(DATE_TIME) ${INFO} RCLONE 连接${LIGHT_GREEN_FONT_PREFIX}成功${FONT_COLOR_SUFFIX}！" >> "${MOVE_LOG}"
             #exit 0 #不然会退出
         else
-            echo -e "$(DATE_TIME) ${ERROR} RCLONE连接${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
+            echo -e "$(DATE_TIME) ${ERROR} RCLONE 连接${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！" >> "${MOVE_LOG}"
             #exit 1 #不然会退出
         fi
     }
@@ -368,7 +368,7 @@ LOAD_RCLONE_ENV() {
 }
 
 UPLOAD_FILE() {
-    echo -e "$(DATE_TIME) ${INFO} 开始上传文件..." >> "${MOVE_LOG}"
+    echo -e "$(DATE_TIME) ${INFO} 开始上传任务..." >> "${MOVE_LOG}"
     TASK_INFO
     RETRY=0
     RETRY_NUM=3
@@ -381,13 +381,13 @@ UPLOAD_FILE() {
         rclone move -v "${SOURCE_PATH}" "${REMOTE_PATH}"
         RCLONE_EXIT_CODE=$?
         if [ ${RCLONE_EXIT_CODE} -eq 0 ]; then
-            echo -e "$(DATE_TIME) ${INFO} 上传${LIGHT_GREEN_FONT_PREFIX}完成${FONT_COLOR_SUFFIX}！文件(夹)信息 ${SOURCE_PATH} -> ${REMOTE_PATH}" >> "${MOVE_LOG}"
+            echo -e "$(DATE_TIME) ${INFO} 上传${LIGHT_GREEN_FONT_PREFIX}完成${FONT_COLOR_SUFFIX}！任务信息 ${SOURCE_PATH} -> ${REMOTE_PATH}" >> "${MOVE_LOG}"
             DELETE_EMPTY_DIR
             break
         else
             RETRY=$((${RETRY} + 1))
             [ ${RETRY} -gt ${RETRY_NUM} ] && (
-                 echo -e "$(DATE_TIME) ${ERROR} 最终上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！文件(夹) ${SOURCE_PATH}" >> "${MOVE_LOG}"
+                 echo -e "$(DATE_TIME) ${ERROR} 最终上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！${SOURCE_PATH}" >> "${MOVE_LOG}"
             )
             sleep 3
         fi
