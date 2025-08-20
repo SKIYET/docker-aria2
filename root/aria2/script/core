@@ -11,6 +11,8 @@ GET_BASE_PATH() {
     MOVE_LOG="/config/logs/move.log"
     DELETE_LOG="/config/logs/delete.log"
     RECYCLE_LOG="/config/logs/recycle.log"
+    #新增RCLONE环境文件，为上传准备
+	RCLONE_ENV_FILE="/config/rclone.env"
 }
 
 # ========================GET_TARGET_PATH==============================
@@ -203,6 +205,12 @@ MOVE_FILE() {
                 [ "${MOVE_LOG}" ] && echo -e "$(DATE_TIME) [ERROR] 移动到 ${FAIL_DIR} 依然失败: ${SOURCE_PATH}" >>"${MOVE_LOG}"
             fi
         fi
+	elif [ "${MOVE}" = "upload" ] then   #上传到远程目录，如网盘等，新增代码
+	echo "$(DATE_TIME) [INFO] 准备移动文件至远程文件夹: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+	CLEAN_UP
+	CHECK_RCLONE
+	LOAD_RCLONE_ENV
+	UPLOAD_FILE
     fi
 }
 
@@ -305,4 +313,84 @@ GET_FINAL_PATH() {
         GET_TARGET_PATH
         return
     fi
+}
+
+#以下为为上传搭配远程目录新增代码
+# ========================GET_REMOTE_PATH==============================
+
+GET_REMOTE_PATH() {
+    # 完成任务后转移
+    REMOTE_DIR="${REMOTE_FOLDER}"
+	    if [ -z "${REMOTE_DIR}" ]; then
+        return
+    # 判断是否为在文件夹内的单文件BT下载任务（会出现移动文件后文件夹保留的情况），如果是则降级到目录
+    # 修复Mac下能够正常运行，Linux下失败的问题
+    elif [ "${FILE_NUM}" -gt 1 ] || [ "$(dirname "${FILE_PATH}")" != "${DOWNLOAD_DIR}" ]; then
+        RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
+        TASK_NAME="${RELATIVE_PATH%%/*}"
+        SOURCE_PATH="${DOWNLOAD_DIR}/${TASK_NAME}"
+        #GET_TARGET_PATH
+        REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
+        return
+    elif [ "${FILE_NUM}" -eq 1 ]; then
+        SOURCE_PATH="${FILE_PATH}"
+        RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
+        # 单文件，去除.
+        TASK_NAME="${RELATIVE_PATH%.*}"
+        #GET_TARGET_PATH
+		REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
+        return
+    fi
+}
+
+CHECK_RCLONE() {
+    [[ $# -eq 0 ]] && {
+        echo && echo -e "Checking RCLONE connection ..."
+        rclone mkdir "${DRIVE_NAME}:${DRIVE_DIR}/TEST"
+        if [[ $? -eq 0 ]]; then
+            rclone rmdir "${DRIVE_NAME}:${DRIVE_DIR}/TEST"
+            echo
+            echo -e "${LIGHT_GREEN_FONT_PREFIX}success${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
+            exit 0
+        else
+            echo
+            echo -e "${RED_FONT_PREFIX}failure${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
+            exit 1
+        fi
+    }
+}
+
+LOAD_RCLONE_ENV() {
+    [[ -f ${RCLONE_ENV_FILE} ]] && export $(grep -Ev "^#|^$" ${RCLONE_ENV_FILE} | xargs -0)
+}
+
+UPLOAD_FILE() {
+    echo -e "$(DATE_TIME) ${INFO} Start upload files..."
+    TASK_INFO
+    RETRY=0
+    RETRY_NUM=3
+    while [ ${RETRY} -le ${RETRY_NUM} ]; do
+        [ ${RETRY} != 0 ] && (
+            echo
+            echo -e "$(DATE_TIME) ${ERROR} Upload failed! Retry ${RETRY}/${RETRY_NUM} ..." >>"${MOVE_LOG}"
+            echo
+        )
+        rclone copy -v "${SOURCE_PATH}" "${REMOTE_PATH}" #使用复制copy而非移动move，避免过程出错又丢失源文件
+        RCLONE_EXIT_CODE=$?
+        if [ ${RCLONE_EXIT_CODE} -eq 0 ]; then
+            UPLOAD_LOG="$(DATE_TIME) ${INFO} Upload done: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+			echo $UPLOAD_LOG
+			rclone purge -v "${SOURCE_PATH}"  #复制到远程目录成功，删除本地目录
+            DELETE_EMPTY_DIR
+            break
+        else
+            RETRY=$((${RETRY} + 1))
+            [ ${RETRY} -gt ${RETRY_NUM} ] && (
+                echo
+                UPLOAD_LOG="$(DATE_TIME) ${ERROR} Upload failed: ${SOURCE_PATH}" >>"${MOVE_LOG}"
+				echo $UPLOAD_LOG
+            )
+            sleep 3
+        fi
+    done
 }
