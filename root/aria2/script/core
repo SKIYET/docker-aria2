@@ -205,7 +205,7 @@ MOVE_FILE() {
                 [ "${MOVE_LOG}" ] && echo -e "$(DATE_TIME) [ERROR] 移动到 ${FAIL_DIR} 依然失败: ${SOURCE_PATH}" >>"${MOVE_LOG}"
             fi
         fi
-	elif [ "${MOVE}" = "upload" ] then   #上传到远程目录，如网盘等，新增代码
+	elif [ "${MOVE}" = "upload" ] then   #使用RCLONE上传到远程目录，如网盘等，新增代码
 	echo "$(DATE_TIME) [INFO] 准备移动文件至远程文件夹: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
 	CLEAN_UP
 	CHECK_RCLONE
