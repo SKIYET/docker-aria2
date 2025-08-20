@@ -205,8 +205,9 @@ MOVE_FILE() {
                 [ "${MOVE_LOG}" ] && echo -e "$(DATE_TIME) [ERROR] 移动到 ${FAIL_DIR} 依然失败: ${SOURCE_PATH}" >>"${MOVE_LOG}"
             fi
         fi
-	elif [ "${MOVE}" = "upload" ] then   #使用RCLONE上传到远程目录，如网盘等，新增代码
+	elif [ "${MOVE}" = "upload" ]; then   #使用RCLONE上传到远程目录，如网盘等，新增代码
 	echo "$(DATE_TIME) [INFO] 准备移动文件至远程文件夹: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+	GET_REMOTE_PATH
 	CLEAN_UP
 	CHECK_RCLONE
 	LOAD_RCLONE_ENV
@@ -330,7 +331,7 @@ GET_REMOTE_PATH() {
         TASK_NAME="${RELATIVE_PATH%%/*}"
         SOURCE_PATH="${DOWNLOAD_DIR}/${TASK_NAME}"
         #GET_TARGET_PATH
-        REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
+        REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
         return
     elif [ "${FILE_NUM}" -eq 1 ]; then
         SOURCE_PATH="${FILE_PATH}"
@@ -338,7 +339,7 @@ GET_REMOTE_PATH() {
         # 单文件，去除.
         TASK_NAME="${RELATIVE_PATH%.*}"
         #GET_TARGET_PATH
-		REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
+		REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
         return
     fi
 }
@@ -346,9 +347,9 @@ GET_REMOTE_PATH() {
 CHECK_RCLONE() {
     [[ $# -eq 0 ]] && {
         echo && echo -e "Checking RCLONE connection ..."
-        rclone mkdir "${DRIVE_NAME}:${DRIVE_DIR}/TEST"
+        rclone mkdir "${REMOTE_FOLDER}/TEST"
         if [[ $? -eq 0 ]]; then
-            rclone rmdir "${DRIVE_NAME}:${DRIVE_DIR}/TEST"
+            rclone rmdir "${REMOTE_FOLDER}/TEST"
             echo
             echo -e "${LIGHT_GREEN_FONT_PREFIX}success${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
             exit 0
@@ -379,8 +380,7 @@ UPLOAD_FILE() {
         RCLONE_EXIT_CODE=$?
         if [ ${RCLONE_EXIT_CODE} -eq 0 ]; then
             UPLOAD_LOG="$(DATE_TIME) ${INFO} Upload done: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
-			echo $UPLOAD_LOG
-			rclone purge -v "${SOURCE_PATH}"  #复制到远程目录成功，删除本地目录
+            rclone purge -v "${SOURCE_PATH}"  #复制到远程目录成功，删除本地目录
             DELETE_EMPTY_DIR
             break
         else
@@ -388,7 +388,6 @@ UPLOAD_FILE() {
             [ ${RETRY} -gt ${RETRY_NUM} ] && (
                 echo
                 UPLOAD_LOG="$(DATE_TIME) ${ERROR} Upload failed: ${SOURCE_PATH}" >>"${MOVE_LOG}"
-				echo $UPLOAD_LOG
             )
             sleep 3
         fi
