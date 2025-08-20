@@ -30,4 +30,5 @@ else
         echo "$(DATE_TIME) [INFO] 准备上传文件: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
         UPLOAD_FILE
         CLEAN_UP
+    fi
 fi
