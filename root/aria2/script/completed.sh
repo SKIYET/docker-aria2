@@ -13,6 +13,10 @@ COMPLETED_PATH
 GET_RPC_INFO
 GET_FINAL_PATH
 
+GET_REMOTE_PATH
+CHECK_RCLONE
+LOAD_RCLONE_ENV
+
 if [ "${FILE_NUM}" -eq 0 ] || [ -z "${FILE_PATH}" ]; then
     exit 0
 elif [ "${GET_PATH_INFO}" = "error" ]; then
