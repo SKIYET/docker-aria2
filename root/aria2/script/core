@@ -388,7 +388,7 @@ UPLOAD_FILE() {
         else
             RETRY=$((${RETRY} + 1))
             [ ${RETRY} -gt ${RETRY_NUM} ] && (
-                echo -e "$(DATE_TIME) ${ERROR} 最终上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！文件(夹) ${SOURCE_PATH}" >> "${MOVE_LOG}"
+                 echo -e "$(DATE_TIME) ${ERROR} 最终上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！文件(夹) ${SOURCE_PATH}" >> "${MOVE_LOG}"
             )
             sleep 3
         fi
