@@ -383,7 +383,7 @@ UPLOAD_FILE() {
         rclone copy -v "${SOURCE_PATH}" "${REMOTE_PATH}" #使用复制copy而非移动move，避免过程出错又丢失源文件
         RCLONE_EXIT_CODE=$?
         if [ ${RCLONE_EXIT_CODE} -eq 0 ]; then
-            UPLOAD_LOG="$(DATE_TIME) ${INFO} 上传${LIGHT_GREEN_FONT_PREFIX}完成${FONT_COLOR_SUFFIX}！目录为 ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+            UPLOAD_LOG="$(DATE_TIME) ${INFO} 上传${LIGHT_GREEN_FONT_PREFIX}完成${FONT_COLOR_SUFFIX}！文件(夹) ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
             rclone purge -v "${SOURCE_PATH}"  #复制到远程目录成功，删除本地目录
             DELETE_EMPTY_DIR
             break
@@ -391,7 +391,7 @@ UPLOAD_FILE() {
             RETRY=$((${RETRY} + 1))
             [ ${RETRY} -gt ${RETRY_NUM} ] && (
                 echo
-                UPLOAD_LOG="$(DATE_TIME) ${ERROR} Upload failed: ${SOURCE_PATH}" >>"${MOVE_LOG}"
+                echo -e "$(DATE_TIME) ${ERROR} 最终上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！文件(夹) ${SOURCE_PATH}..." >>"${MOVE_LOG}"
             )
             sleep 3
         fi
