@@ -327,7 +327,7 @@ GET_REMOTE_PATH() {
         SOURCE_PATH="${DOWNLOAD_DIR}/${TASK_NAME}"
         #GET_TARGET_PATH
         REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
-        return
+        #return
     elif [ "${FILE_NUM}" -eq 1 ] && [ "$(dirname "${FILE_PATH}")" != "${DOWNLOAD_DIR}" ]; then
         SOURCE_PATH="${FILE_PATH}"
         RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
@@ -335,7 +335,7 @@ GET_REMOTE_PATH() {
         TASK_NAME="${RELATIVE_PATH%.*}"
         #GET_TARGET_PATH
 		REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
-        return
+        #return
     elif [ "${FILE_NUM}" -eq 1 ] && [ "$(dirname "${FILE_PATH}")" = "${DOWNLOAD_DIR}" ]; then
         SOURCE_PATH="${FILE_PATH}"
         RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
@@ -343,9 +343,9 @@ GET_REMOTE_PATH() {
         #TASK_NAME="${RELATIVE_PATH%.*}"
         #GET_TARGET_PATH
 		REMOTE_PATH="${REMOTE_FOLDER}/${RELATIVE_PATH}"
-        return
+        #return
     fi
-    echo -e "$(DATE_TIME) ${INFO} 远程目录已确认: ${REMOTE_PATH}">> "${MOVE_LOG}"
+    echo -e "$(DATE_TIME) ${INFO} 远程文件(夹)已确认: ${REMOTE_PATH}">> "${MOVE_LOG}"
 }
 
 CHECK_RCLONE() {
