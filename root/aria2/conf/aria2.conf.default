@@ -102,7 +102,7 @@ allow-overwrite=false
 # BT监听端口, 当端口被屏蔽时使用, 默认:6881-6999
 listen-port=6881
 # 单个种子最大连接数，0为不限制，默认:55
-bt-max-peers=100
+bt-max-peers=128
 # DHT（IPv4）文件
 dht-file-path=/config/dht.dat
 # DHT（IPv6）文件
@@ -149,7 +149,7 @@ bt-load-saved-metadata=true
 # 删除未选择文件，默认:false
 bt-remove-unselected-file=true
 # 保存上传的种子，默认:true
-#rpc-save-upload-metadata=false
+rpc-save-upload-metadata=false
 
 # 是否发送 Want-Digest HTTP 标头。默认：false (不发送)
 # 部分网站会把此标头作为特征来检测和屏蔽 Aria2
