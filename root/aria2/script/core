@@ -319,40 +319,47 @@ GET_FINAL_PATH() {
 GET_REMOTE_PATH() {
     #配置远程目录，REMOTE_FOLDER在docker环境中配置
     REMOTE_DIR="${REMOTE_FOLDER}"
-	    if [ -z "${REMOTE_DIR}" ]; then
-        return
     # 判断是否为在文件夹内的单文件BT下载任务（会出现移动文件后文件夹保留的情况），如果是则降级到目录
     # 修复Mac下能够正常运行，Linux下失败的问题
-    elif [ "${FILE_NUM}" -gt 1 ] || [ "$(dirname "${FILE_PATH}")" != "${DOWNLOAD_DIR}" ]; then
+    if [ "${FILE_NUM}" -gt 1 ] || [ "$(dirname "${FILE_PATH}")" != "${DOWNLOAD_DIR}" ]; then
         RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
         TASK_NAME="${RELATIVE_PATH%%/*}"
         SOURCE_PATH="${DOWNLOAD_DIR}/${TASK_NAME}"
         #GET_TARGET_PATH
-        REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
+        REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
         return
-    elif [ "${FILE_NUM}" -eq 1 ]; then
+    elif [ "${FILE_NUM}" -eq 1 ] || [ "$(dirname "${FILE_PATH}")" != "${DOWNLOAD_DIR}" ]; then
         SOURCE_PATH="${FILE_PATH}"
         RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
         # 单文件，去除.
         TASK_NAME="${RELATIVE_PATH%.*}"
         #GET_TARGET_PATH
-		REMOTE_PATH="${REMOTE_FOLDER}/${TASK_NAME}"
+		REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
+        return
+    elif [ "${FILE_NUM}" -eq 1 ] ; then
+        SOURCE_PATH="${FILE_PATH}"
+        RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
+        # 单文件，去除.
+        #TASK_NAME="${RELATIVE_PATH%.*}"
+        #GET_TARGET_PATH
+		REMOTE_PATH="${REMOTE_DIR}/${RELATIVE_PATH}"
         return
     fi
+echo -e "$(DATE_TIME) ${INFO} 远程目录已确认: ${REMOTE_PATH}"
 }
 
 CHECK_RCLONE() {
     [[ $# -eq 0 ]] && {
         echo && echo -e "Checking RCLONE connection ..."
-        rclone mkdir "${REMOTE_FOLDER}/TEST"
+        rclone mkdir "${REMOTE_DIR}/TEST"
         if [[ $? -eq 0 ]]; then
-            rclone rmdir "${REMOTE_FOLDER}/TEST"
+            rclone rmdir "${REMOTE_DIR}/TEST"
             echo
-            echo -e "${LIGHT_GREEN_FONT_PREFIX}success${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
+            echo -e "echo -e "$(DATE_TIME) ${INFO} RCLONE连接${LIGHT_GREEN_FONT_PREFIX}成功${FONT_COLOR_SUFFIX} >>"${MOVE_LOG}"
             exit 0
         else
             echo
-            echo -e "${RED_FONT_PREFIX}failure${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
+            echo -e "echo -e "$(DATE_TIME) ${ERROR} RCLONE连接${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}" >>"${MOVE_LOG}"
             exit 1
         fi
     }
@@ -370,13 +377,13 @@ UPLOAD_FILE() {
     while [ ${RETRY} -le ${RETRY_NUM} ]; do
         [ ${RETRY} != 0 ] && (
             echo
-            echo -e "$(DATE_TIME) ${ERROR} Upload failed! Retry ${RETRY}/${RETRY_NUM} ..." >>"${MOVE_LOG}"
+            echo -e "$(DATE_TIME) ${ERROR} 上传${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}！将重试${RETRY}/${RETRY_NUM} ..." >>"${MOVE_LOG}"
             echo
         )
         rclone copy -v "${SOURCE_PATH}" "${REMOTE_PATH}" #使用复制copy而非移动move，避免过程出错又丢失源文件
         RCLONE_EXIT_CODE=$?
         if [ ${RCLONE_EXIT_CODE} -eq 0 ]; then
-            UPLOAD_LOG="$(DATE_TIME) ${INFO} Upload done: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+            UPLOAD_LOG="$(DATE_TIME) ${INFO} 上传${LIGHT_GREEN_FONT_PREFIX}完成${FONT_COLOR_SUFFIX}！目录为 ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
             rclone purge -v "${SOURCE_PATH}"  #复制到远程目录成功，删除本地目录
             DELETE_EMPTY_DIR
             break
