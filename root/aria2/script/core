@@ -206,7 +206,7 @@ MOVE_FILE() {
             fi
         fi
     elif [ "${MOVE}" = "upload" ]; then   #使用RCLONE上传到远程目录，如网盘等，新增代码
-        echo -e "$(DATE_TIME) [INFO] 准备上传文件: ${SOURCE_PATH} >>"${MOVE_LOG}"
+        echo -e "$(DATE_TIME) [INFO] 准备上传文件: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
         UPLOAD_FILE
         CLEAN_UP
     fi
