@@ -319,7 +319,7 @@ GET_FINAL_PATH() {
 # ========================GET_REMOTE_PATH==============================
 
 GET_REMOTE_PATH() {
-    # 完成任务后转移
+    #配置远程目录，REMOTE_FOLDER在docker环境中配置
     REMOTE_DIR="${REMOTE_FOLDER}"
 	    if [ -z "${REMOTE_DIR}" ]; then
         return
