@@ -23,6 +23,11 @@ elif [ "${GET_PATH_INFO}" = "error" ]; then
     echo -e "$(DATE_TIME) ${ERROR} GID:${TASK_GID} GET TASK PATH ERROR!"
     exit 1
 else
-    MOVE_FILE
-    CHECK_TORRENT
+    if [ "${MOVE}" != "upload" ]; then
+        MOVE_FILE
+        CHECK_TORRENT
+    elif [ "${MOVE}" = "upload" ]; then   #使用RCLONE上传到远程目录，如网盘等，新增代码
+        echo "$(DATE_TIME) [INFO] 准备上传文件: ${SOURCE_PATH} -> ${REMOTE_PATH}" >>"${MOVE_LOG}"
+        UPLOAD_FILE
+        CLEAN_UP
 fi
