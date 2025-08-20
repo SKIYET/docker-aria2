@@ -354,11 +354,9 @@ CHECK_RCLONE() {
         rclone mkdir "${REMOTE_DIR}/TEST"
         if [[ $? -eq 0 ]]; then
             rclone rmdir "${REMOTE_DIR}/TEST"
-            echo
             echo -e "$(DATE_TIME) ${INFO} RCLONE连接${LIGHT_GREEN_FONT_PREFIX}成功${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
             exit 0
         else
-            echo
             echo -e "$(DATE_TIME) ${ERROR} RCLONE连接${RED_FONT_PREFIX}失败${FONT_COLOR_SUFFIX}" >> "${MOVE_LOG}"
             exit 1
         fi
