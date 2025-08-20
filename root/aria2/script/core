@@ -336,7 +336,7 @@ GET_REMOTE_PATH() {
         #GET_TARGET_PATH
 		REMOTE_PATH="${REMOTE_DIR}/${TASK_NAME}"
         return
-    elif [ "${FILE_NUM}" -eq 1 ] ; then
+    elif [ "${FILE_NUM}" -eq 1 ] && [ "$(dirname "${FILE_PATH}")" = "${DOWNLOAD_DIR}" ]; then
         SOURCE_PATH="${FILE_PATH}"
         RELATIVE_PATH="${FILE_PATH#"${DOWNLOAD_DIR}/"}"
         # 单文件，去除.
