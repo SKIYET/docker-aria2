@@ -345,7 +345,7 @@ GET_REMOTE_PATH() {
 		REMOTE_PATH="${REMOTE_DIR}/${RELATIVE_PATH}"
         return
     fi
-echo -e "$(DATE_TIME) ${INFO} 远程目录已确认: ${REMOTE_PATH}"
+    echo -e "$(DATE_TIME) ${INFO} 远程目录已确认: ${REMOTE_PATH}">> "${MOVE_LOG}"
 }
 
 CHECK_RCLONE() {
@@ -370,7 +370,7 @@ LOAD_RCLONE_ENV() {
 }
 
 UPLOAD_FILE() {
-    echo -e "$(DATE_TIME) ${INFO} Start upload files..."
+    echo -e "$(DATE_TIME) ${INFO} Start upload files..." >> "${MOVE_LOG}"
     TASK_INFO
     RETRY=0
     RETRY_NUM=3
