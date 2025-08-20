@@ -20,7 +20,7 @@ MOVE_PAUSED() {
         echo -e "$(DATE_TIME) ${ERROR} GID:${TASK_GID} GET TASK PATH ERROR!"
         exit 1
     else
-        MOVE=true
+        # MOVE=true #按MOVE设置来
         MOVE_FILE
         CHECK_TORRENT
     fi
