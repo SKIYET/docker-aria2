@@ -12,6 +12,7 @@ if [ "${A2B}" == "true" ]; then
     echo "信息：检测到 A2B_DISABLE_LOG=true，将屏蔽日志并启动 Aria2B。"
     exec aria2b \
       -c "/config/aria2.conf" \
+      -b XL,SD,XF,QN,BD,Unknown \
       --noprogress-keywords XL,SD,XF,QN,BD,Unknown \
       -u "http://127.0.0.1:${PORT}/jsonrpc" \
       -s "${SECRET}" > /dev/null 2>&1
@@ -21,6 +22,7 @@ if [ "${A2B}" == "true" ]; then
     echo "信息：(如需屏蔽日志，请设置环境变量 A2B_DISABLE_LOG=true)"
     exec aria2b \
       -c "/config/aria2.conf" \
+      -b XL,SD,XF,QN,BD,Unknown \
       --noprogress-keywords XL,SD,XF,QN,BD,Unknown \
       -u "http://127.0.0.1:${PORT}/jsonrpc" \
       -s "${SECRET}"
