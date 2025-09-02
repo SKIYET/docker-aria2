@@ -121,10 +121,10 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create \
-            -t "${{ env.DOCKER_IMAGE }}:${{ steps.set-version.outputs.version }}" \
-            -t "${{ env.DOCKER_IMAGE }}:latest" \
-            -t "${{ env.GHCR_IMAGE }}:${{ steps.set-version.outputs.version }}" \
-            -t "${{ env.GHCR_IMAGE }}:latest" \
+            -t "${{ env.DOCKER_IMAGE }}:a2-${{ steps.set-version.outputs.version }}" \
+            -t "${{ env.DOCKER_IMAGE }}:a2-latest" \
+            -t "${{ env.GHCR_IMAGE }}:a2-${{ steps.set-version.outputs.version }}" \
+            -t "${{ env.GHCR_IMAGE }}:a2-latest" \
             $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
       # 检查镜像 manifest
