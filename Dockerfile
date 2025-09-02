@@ -1,4 +1,4 @@
-FROM skiyet/alpine:3.21 AS builder
+FROM skiyet/alpine:3.22 AS builder
 
 # download static aria2c && AriaNg AllInOne
 RUN apk add --no-cache curl wget unzip \
@@ -10,7 +10,7 @@ RUN apk add --no-cache curl wget unzip \
     && curl -fsSL https://raw.githubusercontent.com/SKIYET/docker-aria2/refs/heads/master/install.sh | bash
 
 # install static aria2c
-FROM skiyet/alpine:3.21
+FROM skiyet/alpine:3.22
 
 # set label
 LABEL maintainer="NG6"
