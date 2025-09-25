@@ -114,7 +114,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GIT_TOKEN }}
 
       # 合并 manifest 并推送到 Docker Hub 和 GHCR
       - name: 合并 manifest 并推送
